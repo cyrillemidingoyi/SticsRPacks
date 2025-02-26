@@ -26,37 +26,59 @@ available from each websites (Article sections).
 
 ## Installation
 
+The installation requires the devtools package. If it is not yet
+installed, run first `install.packages("devtools")`.
+
+Then, you can install the SticsRPacks packages by running:
+
 ``` r
-# Install from GitHub
-# install devtools if not yet installed : install.packages("devtools")
-devtools::install_github("SticsRPacks/SticsRPacks")
+devtools::install_github("SticsRPacks/SticsRPacks@*release")
 ```
 
-It this does not work, follow the instructions given
-[here](https://github.com/SticsRPacks/SticsRPacks/issues/1#event-2864068985).
+## Troubleshooting
+
+It the installation does not work:
+
+- In case you have messages such as:
+
+  - “cannot remove prior installation of package ‘\*\*\*\*\*’”
+
+  or
+
+  - API rate limit exceeded for \*\*\*\*
+
+  please refer to
+  [here](https://github.com/SticsRPacks/documentation/blob/master/github_install.md).
+
+- otherwise, please follow the instructions given
+  [here](https://github.com/SticsRPacks/SticsRPacks/issues/1#event-2864068985).
 
 ## Usage
 
 `library(SticsRPacks)` will load the core SticsRPacks packages:
 
--   [SticsRFiles](https://github.com/SticsRPacks/SticsRFiles), for files
-    manipulation.  
--   [SticsOnR](https://github.com/SticsRPacks/SticsOnR), for STICS
-    simulation management.  
--   [CroPlotR](https://github.com/SticsRPacks/CroPlotR), for plotting
-    and statistics.  
--   [CroptimizR](https://github.com/SticsRPacks/CroptimizR), for
-    parameter optimization.
+- [SticsRFiles](https://github.com/SticsRPacks/SticsRFiles), for files
+  manipulation.  
+- [SticsOnR](https://github.com/SticsRPacks/SticsOnR), for STICS
+  simulation management.  
+- [CroPlotR](https://github.com/SticsRPacks/CroPlotR), for plotting and
+  statistics.  
+- [CroptimizR](https://github.com/SticsRPacks/CroptimizR), for parameter
+  optimization.
 
 You also get a condensed summary of conflicts with other packages you
 have loaded:
 
 ``` r
 library(SticsRPacks)
-#> -- Attaching packages ------------------------------------- SticsRPacks 0.2.0 --
-#> v SticsRFiles 0.4.2     v SticsOnR    0.2.2
-#> v CroptimizR  0.4.0     v CroPlotR    0.7.2
-#> 
+#> ── Attaching packages ───────────────────────────────────── SticsRPacks 0.7.1 ──
+#> ✔ SticsRFiles 1.5.0      ✔ SticsOnR    1.2.0 
+#> ✔ CroptimizR  0.6.1      ✔ CroPlotR    0.10.0
+#> ── Conflicts ──────────────────────────────────────── SticsRPacks_conflicts() ──
+#> ✖ CroptimizR::AIC()    masks stats::AIC()
+#> ✖ CroptimizR::BIC()    masks stats::BIC()
+#> ✖ methods::body<-()    masks base::body<-()
+#> ✖ methods::kronecker() masks base::kronecker()
 ```
 
 You can see conflicts created later with `SticsRPacks_conflicts()`:
@@ -64,6 +86,11 @@ You can see conflicts created later with `SticsRPacks_conflicts()`:
 ``` r
 library(MASS)
 SticsRPacks_conflicts()
+#> ── Conflicts ──────────────────────────────────────── SticsRPacks_conflicts() ──
+#> ✖ CroptimizR::AIC()    masks stats::AIC()
+#> ✖ CroptimizR::BIC()    masks stats::BIC()
+#> ✖ methods::body<-()    masks base::body<-()
+#> ✖ methods::kronecker() masks base::kronecker()
 ```
 
 And you can check that all SticsRPacks packages are up-to-date with
@@ -87,6 +114,27 @@ SticsRPacks packages!**
 
 To run it you need to install the `learnr` package.
 
+If you have a version of STICS more recent or equal to 9.2.0 installed
+on your computer, it is recommended that you use this version to carry
+out the exercises of the tutorial.
+
+For this, an environment variable `javastics_path` must be set to the
+path of the corresponding JavaSTICS folder. This can be done:
+
+- in your R session, each time before running the tutorial, by executing
+  the following command:
+  `Sys.setenv(javastics_path="path_to_JavaSTICS")`, where
+  `path_to_JavaSTICS` should be replaced by the absolute path of the
+  corresponding JavaSTICS folder.
+
+or
+
+- by defining this environment variable in your .Renviron file: edit
+  this file (located in your Home directory, can be edited also using
+  `usethis::edit_r_environ()`), and add a new line
+  `javastics_path="path_to_JavaSTICS"`. In this case, your R session
+  must then be restarted (in RStudio: menu Session-\> Restart R).
+
 Then, if you have RStudio version 1.3 or greater, click on the Tutorial
 pane on the right of the RStudio window (close to Environment, History,
 … panes), scroll to see `Tutorial for SticsRPacks` and click on the
@@ -97,10 +145,15 @@ don’t have the Tutorial pane for any reason, you can run the tutorial by
 running the command:
 `learnr::run_tutorial("SticsRpacks", package="SticsRPacks")`
 
-The first time it is started the tutorial takes a few minutes to
+The first time it is started, the tutorial takes a few minutes to
 initialize in order to download all the materials and run the solutions.
 Subsequent runs do not need this steps, the tutorial will thus start
 almost immediately from the second run.
+
+**NEWS: the tutorial can now be done online, without installing
+SticsRPacks: just by clicking
+[here](https://mybinder.org/v2/git/https%3A%2F%2Fforgemia.inra.fr%2Fstics-formation%2Fsticsrpacks-binder.git/v0.7.1?urlpath=shiny/SticsRpacks/),
+thanks to [@eric.casellas](https://forgemia.inra.fr/eric.casellas).**
 
 ## Getting help
 

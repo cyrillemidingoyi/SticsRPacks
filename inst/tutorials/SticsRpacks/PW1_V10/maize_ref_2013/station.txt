@@ -5,7 +5,7 @@ NH3ref
 concrr
 0.02
 latitude
-45.00000
+43.2
 patm
 1000.00000
 aclim
@@ -13,7 +13,7 @@ aclim
 codeetp
 1
 alphapt
-1.26
+1.26000
 codeclichange
 1
 codaltitude

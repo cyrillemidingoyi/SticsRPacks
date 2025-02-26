@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sols version="10.0">
+<sols version="10">
   <sol nom="Sol_RU280">
     <param format="real" max="60.0" min="0.0" nom="argi">17</param>
     <param format="real" max="0.5" min="0.05" nom="norg">0.08</param>

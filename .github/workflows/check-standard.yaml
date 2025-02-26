@@ -2,9 +2,8 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: main
   pull_request:
-    branches: [main, master]
 
 name: R-CMD-check
 
@@ -31,18 +30,23 @@ jobs:
               r: "release",
               rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
             }
-          - {
-              os: ubuntu-latest,
-              r: "3.6",
-              rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
-            }
+          #- {
+          #    os: ubuntu-latest,
+          #    r: "4.0.0",
+          #    rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
+          #  }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "zulu" # openjdk
+          java-version: "17"
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -59,9 +63,30 @@ jobs:
           # Ubuntu doesn't install the proper version of XML see https://github.com/r-lib/actions/issues/559. Remove when fixed.
           # see also: https://stackoverflow.com/questions/73243945/pkgdown-action-failing-at-build-xml
           # Also, pak standard error for pkgs using a subdir (we have Bayesian Tools), which is fixed in rc (2022)
-          extra-packages: any::rcmdcheck
+          # ignoring ape package, manual install of 5.6 version
+          extra-packages: any::rcmdcheck #, ape=?ignore-before-r=4.1.0
           needs: check
+          #exclude: ape
+
+      - name: Install ape 5.6
+        run: Rscript -e "install.packages('https://cran.r-project.org/src/contrib/Archive/ape/ape_5.6.tar.gz', repos = NULL, type = 'source')"
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          error-on: '"error"'
+
+  # Trigger CI using SticsRTest
+  trigger-SticsRTest:
+    name: Trigger SticsRTest check
+    # Publish main when the test job succeeds and it's not a pull request.
+    needs: R-CMD-check
+    if: needs.R-CMD-check.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.TRIGGER_PAT }}
+          repository: SticsRPacks/SticsRTests
+          event-type: R-CMD-check
